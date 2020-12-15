@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         LL Standings annotations
 // @namespace    http://eric.aderhold.us/
-// @version      0.1.2
+// @version      0.1.3
 // @description  Put notes in LL standings pages if clinched promotion/relegation/staying put
 // @author       AderholdE
 // @match        https://learnedleague.com/standings.php?*
@@ -141,16 +141,17 @@
     });
 
     const lettersUsed = data.filter(row => row.letter).map(row => row.letter).filter((item, index, array) => array.indexOf(item) == index);
-    console.log(lettersUsed);
     if (lettersUsed.length) {
+        const promoText = rundle == 'A' ? 'berth in LL championship' : 'promotion';
+        const stayText = rundle == 'A' ? ', and eliminated from LL championship contention' : '';
         $("#lft > div:nth-child(3)").append(`Standings annotations key:<br />
-            Z - Clinched promotion <br/>
-            z - Clinched promotion (barring forfeits) <br />
-            Y - Clinched remaining in the same rundle <br />
-            y - Clinched remaining in the same rundle (barring forfeits) <br />
-            X - Clinched relegation <br />
-            x - Clinched relegation (barring assistance from forfeits) <br />
-            F - Forfeited three or more times. May be excluded from the next season. If so, return to this rundle would be conditioned on space being available.`);
+            ${lettersUsed.includes('Z') ? `Z - Clinched ${promoText} <br/>` : ''}
+            ${lettersUsed.includes('z') ? `z - Clinched ${promoText} (barring forfeits) <br />` : ''}
+            ${lettersUsed.includes('Y') ? `Y - Clinched remaining in the same rundle${stayText}<br />` : ''}
+            ${lettersUsed.includes('y') ? `y - Clinched remaining in the same rundle (barring forfeits)${stayText} <br />` : ''}
+            ${lettersUsed.includes('X') ? 'X - Clinched relegation <br />' : ''}
+            ${lettersUsed.includes('x') ? 'x - Clinched relegation (barring assistance from forfeits) <br />' : ''}
+            ${lettersUsed.includes('F') ? 'F - Forfeited three or more times. May be excluded from the next season. If so, return to this rundle would be conditioned on space being available.' : ''}`);
     }
 
 
