@@ -140,7 +140,7 @@
         }
     });
 
-    const lettersUsed = data.filter(row => row.letter).filter((item, index, array) => array.indexOf(item) == index);
+    const lettersUsed = data.filter(row => row.letter).map(row => row.letter).filter((item, index, array) => array.indexOf(item) == index);
     console.log(lettersUsed);
     if (lettersUsed.length) {
         $("#lft > div:nth-child(3)").append(`Standings annotations key:<br />
